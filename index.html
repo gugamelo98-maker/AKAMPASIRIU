@@ -435,17 +435,109 @@
     .mapa-wrap iframe { width: 100%; height: 100%; border: 0; position: absolute; inset: 0; }
 
     /* ── RESERVA ── */
-    #reserva { background: var(--verde); text-align: center; }
+    #reserva { background: var(--verde); }
     #reserva .titulo-secao {
       font-family: 'Playfair Display', serif;
       font-size: clamp(2.2rem, 4vw, 3.5rem);
       font-weight: 400; color: var(--marfim); margin-bottom: 0.8rem;
+      text-align: center;
     }
     #reserva .sub-reserva {
       font-size: 0.92rem; font-weight: 300;
       color: rgba(247,243,236,0.6); margin-bottom: 2.5rem;
+      text-align: center;
     }
-    .reserva-btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; }
+    .reserva-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-top: 1rem;
+    }
+    .reserva-form-wrap {
+      background: rgba(247,243,236,0.05);
+      border: 1px solid rgba(200,169,106,0.2);
+      border-radius: 4px;
+      padding: 2.5rem;
+    }
+    .reserva-form-wrap h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 400;
+      color: var(--marfim); margin-bottom: 1.8rem;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--areia); margin-bottom: 0.4rem;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      background: rgba(247,243,236,0.08);
+      border: 1px solid rgba(200,169,106,0.25);
+      border-radius: 2px;
+      padding: 0.75rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem; color: var(--marfim);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-group input::placeholder { color: rgba(247,243,236,0.35); }
+    .form-group input:focus,
+    .form-group select:focus { border-color: var(--areia); }
+    .form-group select { color: rgba(247,243,236,0.85); cursor: pointer; }
+    .form-group select option { background: var(--verde); color: var(--marfim); }
+    .btn-reservar {
+      width: 100%; padding: 1rem;
+      background: var(--areia); color: var(--verde);
+      border: none; border-radius: 2px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.3s;
+      margin-top: 0.5rem;
+    }
+    .btn-reservar:hover { background: #d9b97a; }
+    .btn-reservar:disabled { opacity: 0.6; cursor: not-allowed; }
+    .form-msg {
+      margin-top: 1rem; padding: 0.9rem 1rem;
+      border-radius: 2px; font-size: 0.85rem;
+      display: none;
+    }
+    .form-msg.sucesso {
+      background: rgba(61,107,61,0.3);
+      border: 1px solid rgba(61,107,61,0.5);
+      color: #a8d5a8; display: block;
+    }
+    .form-msg.erro {
+      background: rgba(150,50,50,0.3);
+      border: 1px solid rgba(150,50,50,0.5);
+      color: #f0a0a0; display: block;
+    }
+    .reserva-contato {
+      display: flex; flex-direction: column; gap: 2rem;
+    }
+    .reserva-contato-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 400;
+      color: var(--marfim); margin-bottom: 1rem;
+    }
+    .reserva-contato-info p {
+      font-size: 0.88rem; font-weight: 300;
+      line-height: 1.8; color: rgba(247,243,236,0.6);
+      margin-bottom: 1.5rem;
+    }
+    .reserva-contato-info .aviso-sinal {
+      font-size: 0.8rem;
+      color: var(--areia);
+      border-left: 2px solid var(--areia);
+      padding-left: 0.8rem;
+      line-height: 1.6;
+      margin-bottom: 1.8rem;
+    }
     .btn-whats {
       display: inline-flex; align-items: center; gap: 0.6rem;
       font-size: 0.85rem; font-weight: 500;
@@ -453,6 +545,7 @@
       color: var(--verde); background: var(--areia);
       padding: 1rem 2.2rem; border-radius: 2px;
       text-decoration: none; transition: background 0.3s;
+      margin-bottom: 1rem;
     }
     .btn-whats:hover { background: #d9b97a; }
     .btn-insta {
@@ -465,6 +558,11 @@
       text-decoration: none; transition: border-color 0.3s, color 0.3s;
     }
     .btn-insta:hover { border-color: var(--areia); color: var(--areia); }
+    .reserva-btns { display: flex; flex-direction: column; gap: 0.8rem; }
+    @media (max-width: 768px) {
+      .reserva-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .form-row { grid-template-columns: 1fr; }
+    }
 
     /* ── FOOTER ── */
     footer {
@@ -742,20 +840,126 @@
   <section id="reserva">
     <div class="container">
       <h2 class="titulo-secao">Reserve no Akampa Siriú</h2>
-      <p class="sub-reserva">
-        Fale com a gente pelo WhatsApp ou siga no Instagram para ver fotos, disponibilidade e novidades.
-      </p>
-      <div class="reserva-btns">
-        <a href="https://wa.me/5548998200785?text=Olá!%20Vi%20o%20site%20do%20Akampa%20Siriú%20e%20gostaria%20de%20informações%20sobre%20hospedagem."
-          target="_blank" rel="noopener" class="btn-whats">
-          Falar no WhatsApp
-        </a>
-        <a href="https://instagram.com/akampasiriu" target="_blank" rel="noopener" class="btn-insta">
-          @akampasiriu no Instagram
-        </a>
+      <p class="sub-reserva">Preencha o formulário e pague o sinal de 50% para confirmar sua reserva.</p>
+
+      <div class="reserva-layout">
+
+        <!-- FORMULÁRIO -->
+        <div class="reserva-form-wrap">
+          <h3>Dados da reserva</h3>
+          <form id="formReserva">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="r_nome">Nome completo</label>
+                <input type="text" id="r_nome" name="nome" placeholder="Seu nome" required>
+              </div>
+              <div class="form-group">
+                <label for="r_telefone">WhatsApp</label>
+                <input type="tel" id="r_telefone" name="telefone" placeholder="+55 48 9 9999-9999" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="r_email">E-mail</label>
+              <input type="email" id="r_email" name="email" placeholder="seu@email.com" required>
+            </div>
+            <div class="form-group">
+              <label for="r_acomodacao">Acomodação</label>
+              <select id="r_acomodacao" name="acomodacao" required>
+                <option value="" disabled selected>Escolha a acomodação</option>
+                <option value="Glamping" data-preco="0">Glamping</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="r_checkin">Check-in</label>
+                <input type="date" id="r_checkin" name="checkin" required>
+              </div>
+              <div class="form-group">
+                <label for="r_checkout">Check-out</label>
+                <input type="date" id="r_checkout" name="checkout" required>
+              </div>
+            </div>
+            <button type="submit" class="btn-reservar" id="btnReservar">Reservar e pagar sinal →</button>
+            <div class="form-msg" id="formMsg"></div>
+          </form>
+        </div>
+
+        <!-- CONTATO E INFORMAÇÕES -->
+        <div class="reserva-contato">
+          <div class="reserva-contato-info">
+            <h3>Como funciona?</h3>
+            <p>Preencha o formulário ao lado com seus dados e escolha as datas. Você será redirecionado para o pagamento seguro do sinal de 50% via InfinitePay.<br><br>O valor restante é pago na chegada.</p>
+            <p class="aviso-sinal">💳 O pagamento do formulário corresponde a 50% do valor da diária, como sinal para confirmar a reserva. O saldo é pago no check-in.</p>
+            <div class="reserva-btns">
+              <a href="https://wa.me/5548998200785?text=Olá!%20Vi%20o%20site%20do%20Akampa%20Siriú%20e%20gostaria%20de%20informações%20sobre%20hospedagem."
+                target="_blank" rel="noopener" class="btn-whats">
+                Falar no WhatsApp
+              </a>
+              <a href="https://instagram.com/akampasiriu" target="_blank" rel="noopener" class="btn-insta">
+                @akampasiriu no Instagram
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
+
+  <script>
+    // Define datas mínimas (hoje para check-in, amanhã para check-out)
+    const hoje = new Date().toISOString().split('T')[0];
+    document.getElementById('r_checkin').min = hoje;
+    document.getElementById('r_checkin').addEventListener('change', function() {
+      const d = new Date(this.value);
+      d.setDate(d.getDate() + 1);
+      document.getElementById('r_checkout').min = d.toISOString().split('T')[0];
+    });
+
+    document.getElementById('formReserva').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnReservar');
+      const msg = document.getElementById('formMsg');
+      btn.disabled = true;
+      btn.textContent = 'Aguarde...';
+      msg.className = 'form-msg';
+      msg.style.display = 'none';
+
+      const select = document.getElementById('r_acomodacao');
+      const precoCentavos = parseInt(select.options[select.selectedIndex].dataset.preco) || 0;
+
+      const payload = {
+        nome: document.getElementById('r_nome').value,
+        email: document.getElementById('r_email').value,
+        telefone: document.getElementById('r_telefone').value,
+        acomodacao: select.value,
+        checkin: document.getElementById('r_checkin').value,
+        checkout: document.getElementById('r_checkout').value,
+        preco_centavos: precoCentavos
+      };
+
+      try {
+        const res = await fetch('https://rarelookingorca-n8n.cloudfy.live/webhook/akampa-reserva', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.payment_url) {
+          msg.className = 'form-msg sucesso';
+          msg.textContent = 'Reserva iniciada! Redirecionando para o pagamento...';
+          setTimeout(() => { window.location.href = data.payment_url; }, 1500);
+        } else {
+          throw new Error('Sem link de pagamento');
+        }
+      } catch(err) {
+        msg.className = 'form-msg erro';
+        msg.textContent = 'Erro ao processar reserva. Fale conosco pelo WhatsApp.';
+        btn.disabled = false;
+        btn.textContent = 'Reservar e pagar sinal →';
+      }
+    });
+  </script>
 
   <!-- FOOTER -->
   <footer>
