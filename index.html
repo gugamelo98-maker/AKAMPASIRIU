@@ -866,7 +866,7 @@
               <label for="r_acomodacao">Acomodação</label>
               <select id="r_acomodacao" name="acomodacao" required>
                 <option value="" disabled selected>Escolha a acomodação</option>
-                <option value="Glamping" data-preco="0">Glamping</option>
+                <option value="Glamping" data-link="https://checkout.infinitepay.io/casaebelezaa/0hVRBdCuTZ">Glamping</option>
               </select>
             </div>
             <div class="form-row">
@@ -920,44 +920,36 @@
       e.preventDefault();
       const btn = document.getElementById('btnReservar');
       const msg = document.getElementById('formMsg');
-      btn.disabled = true;
-      btn.textContent = 'Aguarde...';
-      msg.className = 'form-msg';
-      msg.style.display = 'none';
-
       const select = document.getElementById('r_acomodacao');
-      const precoCentavos = parseInt(select.options[select.selectedIndex].dataset.preco) || 0;
+      const checkoutLink = select.options[select.selectedIndex].dataset.link;
 
+      if (!checkoutLink) {
+        msg.className = 'form-msg erro';
+        msg.textContent = 'Escolha uma acomodação para continuar.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Redirecionando...';
+
+      // Também notifica o n8n em background com os dados da reserva
       const payload = {
         nome: document.getElementById('r_nome').value,
         email: document.getElementById('r_email').value,
         telefone: document.getElementById('r_telefone').value,
         acomodacao: select.value,
         checkin: document.getElementById('r_checkin').value,
-        checkout: document.getElementById('r_checkout').value,
-        preco_centavos: precoCentavos
+        checkout: document.getElementById('r_checkout').value
       };
+      fetch('https://rarelookingorca-n8n.cloudfy.live/webhook/akampa-reserva', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(() => {});
 
-      try {
-        const res = await fetch('https://rarelookingorca-n8n.cloudfy.live/webhook/akampa-reserva', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (data.payment_url) {
-          msg.className = 'form-msg sucesso';
-          msg.textContent = 'Reserva iniciada! Redirecionando para o pagamento...';
-          setTimeout(() => { window.location.href = data.payment_url; }, 1500);
-        } else {
-          throw new Error('Sem link de pagamento');
-        }
-      } catch(err) {
-        msg.className = 'form-msg erro';
-        msg.textContent = 'Erro ao processar reserva. Fale conosco pelo WhatsApp.';
-        btn.disabled = false;
-        btn.textContent = 'Reservar e pagar sinal →';
-      }
+      msg.className = 'form-msg sucesso';
+      msg.textContent = 'Reserva iniciada! Redirecionando para o pagamento...';
+      setTimeout(() => { window.location.href = checkoutLink; }, 1200);
     });
   </script>
 
